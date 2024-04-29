@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Map ✕ 地元情報：ジモティー = Matti</title>
+    <style>
+        #map {
+            height: 600px;
+            font: "Noto Sans JP";
+            text-align: center;
+            width: 90%;
+        }
+        .infoWindowContent {
+            display: block; /* 初期状態では説明ウィンドウを非表示 */
+            padding: 10px;
+        }
+        h1 {
+            color: black;
+            font: "Noto Sans JP";
+            font-size: 50px;
+            text-align: center;
+            position: absolute;
+            top: 1%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Map ✕ 地元情報：ジモティー = Matti</h1>
+    <div id="map"></div>
+    <style>
+        #map {
+          position: absolute; /* 絶対配置 */
+          top: 55%; /* 上部から55%の位置 */
+          left: 50%; /* 左側から50%の位置 */
+          transform: translate(-50%, -50%); /* 中央寄せ */
+          width: 90%; /* マップの幅 */
+          height: 680px; /* マップの高さ */
+        }
+      </style>
+      
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNCVtNVKIPfuW2niR6dBUv-DWKDq2n8_8&callback=initMap"></script>
+    <script>
+        let map;
+        let markers = [];
+        let infoWindows = [];
+
+        // 初期化と既存マーカーの設定
+    function initMap() {
+    const myHomeLatLng = {lat: 35.513725773594665, lng: 137.87379972518704}; // 地図の中心を喬木村役場に設定
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: myHomeLatLng,
+        zoom: 15
+    });
+
+    // 喬木村役場の情報を定義する
+    const townHallInfo = '<div><h2>喬木村役場</h2><p>ここは喬木村の中心で、地域の行政サービスが行われています。</p></div>';
+
+    // 喬木村役場のマーカーを追加
+    const townHallMarker = new google.maps.Marker({
+        position: myHomeLatLng,
+        map: map,
+        title: '喬木村役場',
+        icon: {
+            url: 'images/ベリー&ゴー_ウェルカム TAKAGI.jpg',
+            scaledSize: new google.maps.Size(32, 32),
+            anchor: new google.maps.Point(16, 32)
+        }
+    });
+
+    // インフォウィンドウを作成
+    const townHallInfoWindow = new google.maps.InfoWindow({
+        content: townHallInfo
+    });
+
+    // マーカーをクリックしたときにインフォウィンドウを表示
+    townHallMarker.addListener('click', function() {
+        townHallInfoWindow.open(map, townHallMarker);
+    });
+
+    addExistingMarkers();
+    addRestaurantMarkers();
+}
+
+        // 既存の事業者マーカーを追加する関数
+    function addExistingMarkers() {
+    let markerData = [
+        {
+            name: "花工房あげたけ",
+            description: "花のテーマパーク<br>「食べる、着る、作る」を体験する花屋さん <iframe width='500' height='315' src='https://www.youtube.com/embed/iUuELDvsrIg' frameborder='0' allowfullscreen></iframe>",
+            lat: 35.491195257281,
+            lng: 133.7555753510134,
+            icon: {
+            url: 'images/花工房あげたけ.png',
+            scaledSize: new google.maps.Size(40, 40),
+            anchor: new google.maps.Point(16, 32)
+            }
+            
+        },
+        {
+            name: "ワク珈琲",
+            description: "ロジカル珈琲研究家<br>珈琲の焙煎をデータ化！？",
+            lat: 35.51360373177979, 
+            lng: 133.65076746146121,
+            icon:  {
+            url: 'images/ワク珈琲.png',
+            scaledSize: new google.maps.Size(40, 40),
+            anchor: new google.maps.Point(16, 32)
+            }
+        },
+        {
+            name: "北条ワイン",
+            description: "ぶどう農場マニアの地域おこし協力隊田中さん<src='https://hojyowine.jp/'>",
+            lat: 35.486594276199135,
+            lng: 133.7952128946486,
+            icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+        },
+        {
+            name: "お台場いちば",
+            description: "地域の農産物の集荷直売所<br>抱えている問題：人員不足<br>課題：先行き不透明の投資",
+            lat: 35.4989936997868,
+            lng: 133.7622798541717,
+            icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+        },
+    ];
+
+    markerData.forEach(function(data) {
+        addMarker(data); // この行で各データに対してマーカーを追加する関数を呼び出します。
+    });
+}      
+        // 新しい飲食店マーカーを追加する関数
+        function addRestaurantMarkers() {
+            const restaurants = [
+            {   
+                name: '由喜松(ゆきまつ)', 
+                address: '長野県下伊那郡喬木村阿島1437', 
+                lat: 35.517937212076575, 
+                lng: 137.87313106441792 
+            },
+            {   
+                name: 'アグリカフェITANE', 
+                address: '長野県下伊那郡喬木村下伊那郡喬木村1949', 
+                lat: 35.51669419242143, 
+                lng: 137.8840895490746 
+            },
+            {   
+                name: 'ツキフクヤ', 
+                address: '長野県下伊那郡喬木村阿島1358-1', 
+                lat: 35.52027175543324, 
+                lng: 137.8738648644179
+            },
+            {   
+                name: 'アイビー', 
+                address: '長野県下伊那郡喬木村小川6563-1', 
+                lat: 35.51616126035213, 
+                lng: 137.87244836256707 
+            },
+            {   
+                name: '養老乃瀧 喬木店', 
+                address: '長野県下伊那郡喬木村阿島1362-2', 
+                lat: 35.521961571226726, 
+                lng: 137.8770762050161 
+            }
+            ];
+
+            restaurants.forEach(function(restaurant) {
+                const marker = new google.maps.Marker({
+                    position: {lat: restaurant.lat, lng: restaurant.lng},
+                    map: map,
+                    title: restaurant.name
+                });
+
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `<div><h3>${restaurant.name}</h3><p>${restaurant.address}</p></div>`
+                });
+
+                marker.addListener('click', function() {
+                    infoWindows.forEach(window => window.close()); // 他の全ての情報ウィンドウを閉じる
+                    infoWindow.open(map, marker);
+                });
+
+                markers.push(marker);
+                infoWindows.push(infoWindow);
+            });
+        }
+
+        function addMarker(data) {
+            let marker = new google.maps.Marker({
+                position: {lat: data.lat, lng: data.lng},
+                map: map,
+                icon: data.icon,
+                title: data.name
+            });
+
+            let infoWindow = new google.maps.InfoWindow({
+                content: '<h3>' + data.name + '</h3><p class="infoWindowContent">' + data.description + '</p>'
+            });
+
+            marker.addListener('click', function() {
+                infoWindows.forEach(window => window.close());
+                infoWindow.open(map, marker);
+                $('.infoWindowContent').show();
+            });
+
+            markers.push(marker);
+            infoWindows.push(infoWindow);
+        }
+
+        // すべてのインフォウィンドウを閉じる関数
+        function closeInfoWindows() {
+            infoWindows.forEach(function(infoWindow) {
+                infoWindow.close();
+            });
+        }
+    </script>
+</body>
+</html>
